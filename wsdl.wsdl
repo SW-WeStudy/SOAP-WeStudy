@@ -1,0 +1,63 @@
+<definitions name="UserAuth" targetNamespace="urn:UserOutAuth">
+ 
+<types>
+  <schema xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="urn:UserOutAuth"> </schema>
+</types>
+
+<message name="UserDataRequest">
+  <part name="email" type="xsd:string"/>
+</message>
+<message name="UserDataResponse">
+  <part name="displayName" type="xsd:string"/>
+  <part name="photoURL" type="xsd:string"/>
+</message>
+<message name="TeacherData">
+  <part name="name" type="xsd:string"/>
+  <part name="study" type="xsd:string"/>
+  <part name="email" type="xsd:string"/>
+</message>
+<portType name="MyPort">
+  <operation name = "UserFunction">
+    <input message = "tns:UserDataRequest"/>
+    <output message = "tns:UserDataResponse"/>
+  </operation>
+  <operation name="TeacherFunction">
+    <output message = "tns:TeacherData"/>
+  </operation>
+</portType>
+
+<binding name = "MyFunction_Binding" type = "tns:MyPort">
+  <soap:binding style = "rpc"
+         transport = "http://schemas.xmlsoap.org/soap/http"/>
+      <operation name = "UserFunction" pattern="http://www.w3.org/2003/11/wsdl/out-only">
+         <soap:operation soapAction = "UserFunction"/>
+         <input>
+            <soap:body encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/" namespace = "urn:UserOutAuth" use = "encoded" />
+         </input>
+         <output>
+            <soap:body encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/" namespace = "urn:UserOutAuth" use = "encoded" />
+         </output>
+      </operation>
+</binding>
+<binding name = "MyFunctionTeacher_Binding" type = "tns:MyPortTeacher">
+    <soap:binding style = "rpc"
+         transport = "http://schemas.xmlsoap.org/soap/http"/>
+    <operation name = "TeacherFunction" pattern="http://www.w3.org/2003/11/wsdl/out-only">
+          <soap:operation soapAction = "TeacherFunction"/>
+          <output>
+              <soap:body encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/" namespace = "urn:UserOutAuth" use = "encoded" />
+          </output>
+        </operation>
+</binding>
+<service name = "MyService">
+    <port binding = "tns:MyFunction_Binding" name = "MyPort">
+        <soap:address
+        location = "http://3.233.2.82:3000/auth/getuserbyemail"  />
+    </port>
+    <port binding = "tns:MyFunctionTeacher_Binding" name = "MyPortTeacher">
+        <soap:address
+        location = "http://localhost:3000/auth/getuserbyemail"  />
+    </port>
+</service>
+
+</definitions>
