@@ -36,9 +36,9 @@ const app = express()
 const port = 3000
 
 app.get('/teachers', (req, res) => {
-    soap.createClient("http://localhost:8000/wsdl?wsdl", function(err, client) {
-        client.TeacherFunction(arg, function(err, result) {
-            res.send(result)
+    soap.createClient("http://34.68.179.24:3010/interface/wsdl?wsdl", function(err, client) {
+        client.profesores(null, function(err, result) {
+            res.send(result.value)
         });
     });
 })
