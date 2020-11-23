@@ -37,8 +37,14 @@ const port = 3000
 
 app.get('/teachers', (req, res) => {
     soap.createClient("http://34.68.179.24:3010/interface/wsdl?wsdl", function(err, client) {
-        client.profesores(null, function(err, result) {
-            res.send(result.value)
+        client.profesores(null, async function(err, result) {
+            let data = [] 
+            console.log(data)
+            result.value.forEach(e => {
+                data.push({"name":e.name["$value"],"mail":e.mail["$value"]})
+            })
+            console.log(data)
+            res.send(data)
         });
     });
 })
